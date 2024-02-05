@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_app/data/task_list.dart';
@@ -124,7 +122,6 @@ class _TaskHomeState extends State<TaskHome> {
 
   void _openAddTask() {
     showModalBottomSheet(
-      isScrollControlled: true,
       backgroundColor: Color.fromARGB(116, 200, 155, 255),
       context: context,
       builder: (context) => NewTask(
@@ -135,6 +132,25 @@ class _TaskHomeState extends State<TaskHome> {
 
   @override
   Widget build(BuildContext context) {
+    Widget contentList = Center(
+      child: Text(
+        'No task to be done. Start addding !',
+        style: TextStyle(color: Colors.deepPurple.shade100),
+      ),
+    );
+    if (filteredList.isNotEmpty) {
+      contentList = 
+           ListView.builder(
+        itemCount: filteredList.length,
+        itemBuilder: (context, index) => TaskItem(
+          task: filteredList[index],
+          editStatus: _editTaskStatus,
+          deleteTask: _deleteTask,
+          onEdit: _onEditAlert,
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -295,16 +311,7 @@ class _TaskHomeState extends State<TaskHome> {
                               ],
                             ),
                           ),
-                          Expanded(
-                              child: ListView.builder(
-                            itemCount: filteredList.length,
-                            itemBuilder: (context, index) => TaskItem(
-                              task: filteredList[index],
-                              editStatus: _editTaskStatus,
-                              deleteTask: _deleteTask,
-                              onEdit: _onEditAlert,
-                            ),
-                          ))
+                          Expanded(child: contentList)
                         ]),
                   ),
                 )
