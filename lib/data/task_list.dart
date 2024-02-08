@@ -17,7 +17,7 @@ class TaskList {
         date: DateTime.now(),
         status: Status.finished,
         category: Category.health),
-         Task(
+    Task(
         taskDescription: 'Be brave and be nice.',
         date: DateTime.now(),
         status: Status.onGoing,
@@ -25,5 +25,17 @@ class TaskList {
   ];
   List<Task> get getTaskList {
     return taskList;
+  }
+}
+
+class TaskBucket {
+  const TaskBucket({required this.tasksByStatus, required this.status});
+  final List<Task> tasksByStatus;
+  final Status status;
+  TaskBucket.byStatus(List<Task> taskList, this.status)
+      : tasksByStatus =
+            taskList.where((task) => task.status == status).toList();
+  int get taskBucketLength {
+    return tasksByStatus.length;
   }
 }

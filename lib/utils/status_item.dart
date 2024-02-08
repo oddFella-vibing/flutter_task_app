@@ -14,37 +14,32 @@ class StatusItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+      padding: const EdgeInsets.symmetric(horizontal:10.0),
       child: ElevatedButton(
+      
           style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 5,vertical: 8),
             elevation: 5,
-shadowColor: Colors.deepPurple,
+            shadowColor: Colors.deepPurple,
             foregroundColor: Colors.white,
             backgroundColor: iconColor,
             shape:
-                RoundedRectangleBorder(
-                  
-                  borderRadius: BorderRadius.circular(20)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           ),
-          onPressed:()=> onChoose(status),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Icon(
-                  statusIcons[status],
-                  size: 50,
-                  color: Colors.white,
-               
-                ),
-                Text(
-                  status.name,
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255), fontSize: 10),
-                )
-              ],
-            ),
+          onPressed: () => onChoose(status),
+          child: Column(
+            children: [
+              Icon(
+                statusIcons[status],
+                size: 40,
+                color: Colors.white,
+              ),
+              Text(
+                status.name,
+                style: TextStyle(
+                    color: Color.fromARGB(255, 255, 255, 255), fontSize: 10),
+              )
+            ],
           )),
     );
   }

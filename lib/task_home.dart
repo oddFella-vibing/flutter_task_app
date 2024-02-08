@@ -6,6 +6,7 @@ import 'package:task_app/utils/edit_task.dart';
 
 import 'package:task_app/utils/new_task.dart';
 import 'package:task_app/utils/status_item.dart';
+import 'package:task_app/utils/task_graph.dart';
 import 'package:task_app/utils/task_item.dart';
 
 class TaskHome extends StatefulWidget {
@@ -139,8 +140,7 @@ class _TaskHomeState extends State<TaskHome> {
       ),
     );
     if (filteredList.isNotEmpty) {
-      contentList = 
-           ListView.builder(
+      contentList = ListView.builder(
         itemCount: filteredList.length,
         itemBuilder: (context, index) => TaskItem(
           task: filteredList[index],
@@ -211,39 +211,49 @@ class _TaskHomeState extends State<TaskHome> {
           ),
           Container(
             padding: const EdgeInsets.only(
-              top: 20,
+              top: 10,
             ),
             decoration: BoxDecoration(
-                gradient:
-                    RadialGradient(radius: 2, center: Alignment(2, 1), colors: [
-              const Color.fromARGB(255, 131, 230, 182),
-              Color.fromARGB(255, 193, 197, 240).withOpacity(0.3)
-            ])),
+                gradient: RadialGradient(
+                    radius: 2,
+                    center: const Alignment(2, 1),
+                    colors: [
+                  const Color.fromARGB(255, 131, 230, 182),
+                  const Color.fromARGB(255, 193, 197, 240).withOpacity(0.3)
+                ])),
             child: Column(
               children: [
-                // date filter here
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
+                      // status filter and graph row
                       Container(
-                          height: 220,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white.withOpacity(0.4)),
-                          child: GridView.builder(
-                            itemCount: Status.values.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    mainAxisExtent: 110, crossAxisCount: 2),
-                            itemBuilder: (context, index) => StatusItem(
-                                iconColor: statusColors[Status.values[index]]!,
-                                onChoose: _filterTaskStatus,
-                                status: Status.values[index]),
-                          )),
+                        clipBehavior: Clip.hardEdge,
+                        height: 200,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(25),
+                            color: Colors.white.withOpacity(0.4)),
+                        child: TaskGraph(taskList: taskList),
+                      ),
                       const SizedBox(
-                        height: 20,
+                        height: 10,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ...Status.values
+                                .map(
+                                  (status) => StatusItem(
+                                      iconColor: statusColors[status]!,
+                                      onChoose: _filterTaskStatus,
+                                      status: status),
+                                )
+                                .toList()
+                          ]),
+                      const SizedBox(
+                        height: 10,
                       ),
                       Container(
                         height: 70,
@@ -269,7 +279,7 @@ class _TaskHomeState extends State<TaskHome> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Expanded(
                   child: Container(
@@ -290,8 +300,8 @@ class _TaskHomeState extends State<TaskHome> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20.0, vertical: 10),
+                            padding: const EdgeInsets.only(
+                                top: 10.0, bottom: 0, right: 20, left: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

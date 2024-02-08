@@ -18,6 +18,21 @@ class _NewTaskState extends State<NewTask> {
   Category _selectedCategory = Category.personal;
 
   void _onAddTask() {
+    if (_selectedDate == null || _taskController.text.trim().isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            'Please enter correct data !',
+            style: TextStyle(fontSize: 15),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context), child: Text('okay'))
+          ],
+        ),
+      );
+    }
     widget.addNewTask(Task(
         taskDescription: _taskController.text,
         date: _selectedDate!,
@@ -27,7 +42,6 @@ class _NewTaskState extends State<NewTask> {
   }
 
   void _presentDatePicker() async {
-    
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
     final lastDate = DateTime(now.year + 1, now.month, now.day);
@@ -47,15 +61,14 @@ class _NewTaskState extends State<NewTask> {
   @override
   Widget build(BuildContext context) {
     return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10,sigmaY: 10),
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: Container(
-        padding:const EdgeInsets.symmetric(horizontal: 20),
-        
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         width: double.infinity,
         decoration: BoxDecoration(
-          border:const Border(top: BorderSide(color: Colors.white)),
-            color:Color.fromARGB(255, 169, 106, 237).withOpacity(0.5),
-            borderRadius:const BorderRadius.only(
+            border: const Border(top: BorderSide(color: Colors.white)),
+            color: Color.fromARGB(255, 169, 106, 237).withOpacity(0.5),
+            borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         child: Column(children: [
           const Icon(
@@ -69,33 +82,38 @@ class _NewTaskState extends State<NewTask> {
           TextField(
             controller: _taskController,
             maxLength: 50,
-            decoration:  InputDecoration(
+            decoration: InputDecoration(
                 hintText: 'Task to be done',
-                hintStyle: GoogleFonts.patrickHand(color: Color.fromARGB(255, 232, 231, 232),fontSize: 20)),
+                hintStyle: GoogleFonts.patrickHand(
+                    color: Color.fromARGB(255, 232, 231, 232), fontSize: 20)),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               DropdownButton(
-                icon:const Icon(
+                icon: const Icon(
                   Icons.arrow_drop_down,
                   color: Colors.white,
                 ),
-                dropdownColor:const Color.fromARGB(255, 173, 147, 220),
+                dropdownColor: const Color.fromARGB(255, 173, 147, 220),
                 value: _selectedCategory,
                 items: Category.values
                     .map((category) => DropdownMenuItem(
                         value: category,
-
                         child: Row(
-                          
                           children: [
-                            Icon(categoryIcons[category],color:Color.fromARGB(255, 203, 173, 255) ,),
-                            const SizedBox(width: 5,),
+                            Icon(
+                              categoryIcons[category],
+                              color: Color.fromARGB(255, 203, 173, 255),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
                             Text(
                               category.name,
                               style: GoogleFonts.roboto(
-                                  color: const Color.fromARGB(255, 233, 231, 236)),
+                                  color:
+                                      const Color.fromARGB(255, 233, 231, 236)),
                             ),
                           ],
                         )))
